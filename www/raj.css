@@ -1,0 +1,53 @@
+.main-header .logo {
+height: 20px;
+font-size: 13px;
+font-weight: bold;
+line-height: 20px;
+}
+
+.main-header .sidebar-toggle {
+  padding: 0px;
+}
+
+.main-header .navbar {
+  min-height: 0px !important;
+}
+
+.left-side, .main-sidebar {
+  padding-top: 15px !important;
+}
+
+.form-group {
+  margin-bottom: 2px;
+}
+
+.selectize-input {
+  min-height: 0px !important;
+  padding-top: 1px !important;
+  padding-bottom: 1px !important;
+  padding-left: 12px !important;
+  padding-right: 12px !important;
+}
+
+.sidebar {
+  height: 99vh; 
+  overflow-y: auto;
+}
+
+section.sidebar .shiny-input-container {
+    padding: 5px 15px 0px 12px;
+}
+
+.btn {
+  padding: 1px;
+  margin-left: 15px;
+  color:#fff;
+  background-color:#d33724;
+  border-color:#d33724;
+}
+
+.btn.focus, .btn:focus, .btn:hover {
+  color: #d33724;
+  background-color:#fff;
+  border-color:#fff;
+}
