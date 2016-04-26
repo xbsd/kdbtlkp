@@ -9,11 +9,65 @@ tips_lkp:(7#"*";enlist",") 0: `:tips.csv
 tabs:(tables`) where (tables`) like "*_lkp";
 
 /Create Index Tables
-it:{[t;x] (enlist x)!enlist ?[t;();();(iasc;x)]}
-ct:{xt:string x; eval parse xt,"_index::flip raze it[`",xt,";] each cols `",xt}
+it:{[t;x] (enlist x)!enlist ?[t;();();(rank;x)]}
+ct:{xt:string x; eval parse xt,"_index::flip raze it[`",xt,";] peach cols `",xt}
 ct each tabs;
 
 /
+
+zz:exec i from tips_lkp where total_bill like "10*"
+
+- Use this -- @[tips_lkp;zz iasc @[tips_lkp_index`total_bill;zz]]
+
+AND FOR SELECTING ONLY SPECIFIC COLUMNS --
+
+q)\t @[tips_lkp;@[zz iasc @[tips_lkp_index`total_bill;zz];10 +til 10]] /Rows 10 - 20
+95
+
+
+zz:exec i from tips_lkp where total_bill like "10*"
+\t @[tips_lkp;@[zz iasc @[tips_lkp_index`total_bill;zz];10 +til 10]]
+28
+
+
+q)@[tips_lkp;@[zz iasc @[tips_lkp_index`total_bill;zz];10 +til 10]]
+total_bill tip
+-----------------
+"10.07"    "1.83"
+"10.07"    "1.25"
+"10.07"    "1.83"
+"10.07"    "1.25"
+"10.07"    "1.83"
+"10.07"    "1.25"
+"10.07"    "1.83"
+"10.07"    "1.25"
+"10.07"    "1.83"
+"10.07"    "1.25"
+q)\t `total_bill xasc tips_lkp
+19701
+
+
+
+FOR DESCENDING --
+
+q)@[tips_lkp;@[zz idesc @[tips_lkp_index`total_bill;zz];10 +til 10]] /Use idesc
+
+total_bill tip    sex    smoker day   time     size
+---------------------------------------------------
+"9.94"     "1.56" "Male" "No"   "Sun" "Dinner" ,"2"
+"9.94"     "1.56" "Male" "No"   "Sun" "Dinner" ,"2"
+"9.94"     "1.56" "Male" "No"   "Sun" "Dinner" ,"2"
+
+
+/@[@[tips_lkp;zz];iasc @[tips_lkp_index`total_bill;zz]]
+
+OR
+
+zz:exec i from tips_lkp where tip like "2*"
+@[@[tips_lkp;zz];iasc @[tips_lkp_index`tip;zz]]
+
+
+
 q)t:([]a:`d`c`b`a;b:1 2 3 4)
 q)flip raze it[t;] each cols t
 a b
