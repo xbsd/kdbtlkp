@@ -10,7 +10,8 @@ tabs:(tables`) where (tables`) like "*_lkp";
 
 /Create Index Tables
 it:{[t;x] (enlist x)!enlist ?[t;();();(iasc;x)]}
-ct:{xt:string x; eval parse xt,"_index::flip raze it[`",xt,";] each cols `",xt} each tabs;
+ct:{xt:string x; eval parse xt,"_index::flip raze it[`",xt,";] each cols `",xt}
+ct each tabs;
 
 /
 q)t:([]a:`d`c`b`a;b:1 2 3 4)
