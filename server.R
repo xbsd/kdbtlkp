@@ -5,24 +5,25 @@ library(data.table)
 library(DT)
 
 
-dir <- "/srv/shiny-server/cms/raj_tlkp"
+#dir <- "/srv/shiny-server/cms/raj_tlkp"
+dir <- "~/r/kdbtlkp/"
+hostname <- "localhost"
+port <- 5000
+
 setwd(dir)
 
-source("/srv/shiny-server/cms/raj_tlkp/qserver.R")
-h<-open_connection("dnbig001",5000)
+source(paste0(dir,"qserver.R"))
+h<-open_connection(hostname,port)
 
-tableList <- c("Plan","Product")
-tableList <- c("t","t1","Product","Prescriber")
+tableList <- execute(h,"tabs")
+
+if (length(tableList)==0){
+  print (paste0("No Tables Found, Please check KDB+ Session on Port ",as.character(port)))
+  stopApp("No Tables Found")
+}
+
 tcols <- execute(h,paste0("cols each ",paste0("`",tableList,collapse="")))
 tcols <- setNames(tcols, tableList)
-
-employee = data.frame(
-  `First name` = character(), `Last name` = character(), Position = character(),
-  Office = character(),
-  check.names = FALSE
-)
-
-t1 = data.frame(`First name` = character(), `Last name` = character(),check.names = FALSE)
 
 server <- function(input, output,session) {
 
@@ -30,7 +31,7 @@ server <- function(input, output,session) {
     selectInput("tableName","Select Dataset" , tableList, selected = "t1", 
     multiple = FALSE, selectize = TRUE)})
   
-  z <- eventReactive(input$tableName, {
+  getTab <- eventReactive(input$tableName, {
   tname <- input$tableName
   
   # Create a generic placeholder table
@@ -53,7 +54,7 @@ server <- function(input, output,session) {
     ajax = list(
       serverSide = TRUE, processing = TRUE,
       #url = 'http://datatables.net/examples/server_side/scripts/jsonp.php',
-      url = "http://dnbig001.us01.apmn.org:5000/",
+      url = paste0("http://",hostname,":",as.character(port),"/"),
       dataType = 'jsonp',
       type = "POST",
       data = JS(tnamejs)
@@ -63,7 +64,6 @@ server <- function(input, output,session) {
   dt
   })
   
-  output$table <- renderDataTable(z())
-
+  output$table <- renderDataTable(getTab())
 
 }

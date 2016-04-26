@@ -2,9 +2,6 @@
 library(shiny)
 library(shinydashboard)
 
-dir <- "/srv/shiny-server/cms/raj_tlkp"
-setwd(dir)
-
 ## Sidebar content
 sidebar <- dashboardSidebar(
   sidebarMenu(
