@@ -23,12 +23,19 @@ if (length(tableList)==0){
 }
 
 tcols <- execute(h,paste0("cols each ",paste0("`",tableList,collapse="")))
-tcols <- setNames(tcols, tableList)
+
+if (length(tableList)==1) {
+  tcols <- setNames(list(tcols), list(tableList))
+} else {
+  tcols <- setNames(tcols, tableList)
+}
+
+
 
 server <- function(input, output,session) {
 
   output$selectTable <- renderUI({
-    selectInput("tableName","Select Dataset" , tableList, selected = "t1", 
+    selectInput("tableName","Select Dataset" , c(tableList), selected = "t1", 
     multiple = FALSE, selectize = TRUE)})
   
   getTab <- eventReactive(input$tableName, {
